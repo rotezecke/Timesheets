@@ -15,6 +15,7 @@ if( isset($params['public']) ) $public = (int)$params['public'];
 
 $userid = get_userid();
 
+
 if (isset($params['submit'])) {
     $error = false;
     if ($name == '') $error = $this->Lang('nonamegiven');
@@ -28,7 +29,7 @@ if (isset($params['submit'])) {
 			$query = 'SELECT id FROM '.CMS_DB_PREFIX.'mod_timesheets_typedefs WHERE payroll_software_id = ?';
 			$exists = $db->GetOne($query,array($payroll_software_id));
 			if( $exists ) $error = $this->Lang('payroll_idexists');
-		}	
+		}
     if( !$error ) {
         $max = $db->GetOne('SELECT max(item_order) + 1 FROM ' . CMS_DB_PREFIX . 'mod_timesheets_typedefs');
         if( $max == null ) $max = 1;
@@ -36,14 +37,14 @@ if (isset($params['submit'])) {
         $query = 'INSERT INTO '.CMS_DB_PREFIX.'mod_timesheets_typedefs (name, payroll_software_id, item_order, public) VALUES (?,?,?,?)';
         $parms = array($name, $payroll_software_id, $max, $public);
         $res = $db->Execute($query, $parms );
-				
-				if( !$res ) 
+
+				if( !$res )
 				{
 					audit('', 'Timesheets error: '.$name, $db->ErrorMsg());
 				}
 				else
 				{
-					audit('', 'Timesheets: '.$name, $this->Lang('fielddefadded'));	 
+					audit('', 'Timesheets: '.$name, $this->Lang('fielddefadded'));
 				}
 
         // done.
